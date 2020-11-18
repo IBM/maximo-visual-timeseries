@@ -1,8 +1,10 @@
 # Analyze live video streams using IBM Maximo Visual Inspection
 
-In this Code Pattern we'll provide a web application that has the ability to generate a visual timeline of objects and actions detected in a video feed. This code pattern is targeted towards users who have access to live streams or CCTV cameras, and would like to apply object detection and image classification to their live camera feeds.
+In this Code Pattern we'll provide a web application that has the ability to generate a line graph showing objects and/or actions detected in a video feed. This enables users to easily view the stages of any given process in chronological order.
 
-<!-- When the reader has completed this Code Pattern, they will understand how to extract information from an IBM Maximo Visual Inspection instance as a CSV file, and how to visualize and filter the data within a web browser. -->
+For example, airlines can use this application to observe the timing of an aircraft crew's actions, such as when the aircraft is arriving at a gate, being unloaded/refueled, and then pushed back out to the runway.
+
+<!-- have access to live streams or CCTV cameras, and would like to apply object detection and image classification to their live camera feeds. -->
 
 <!-- The intended audience for this Code Pattern -->
 
@@ -17,9 +19,8 @@ In this Code Pattern we'll provide a web application that has the ability to gen
 
 1. User accesses web application and provides login credentials for both the Camera system and IBM Maximo Visual Inspection. User also fills out form to select model and classify images as positive or negative.
 2. Node.js backend connects to camera RTSP stream and forwards to frontend web application
-3. As frontend plays live video, user clicks "Capture Frame" or "Start Interval"
-4. Captured frames are forwarded to IBM Maximo Visual Inspection backend for analysis.
-5. Analysis results are rendered in web app, and grouped by user-defined positive/negative labels.
+3. Captured frames are forwarded to IBM Maximo Visual Inspection backend for analysis.
+4. Detected actions and objects are rendered on a line graph.
 
 # Prerequisites
 
@@ -27,7 +28,7 @@ In this Code Pattern we'll provide a web application that has the ability to gen
 
 You will also need to train and deploy a custom model beforehand. This can be done following the steps in this [video](https://www.youtube.com/watch?v=-gzGuj3B__U)
 
-* Docker - Can be used to run the application in a virtual container. If running via docker, the remaining prerequisites can be bypassed, and you can skip ahead to the steps labeled **docker** in [step 2](#2-start-application)
+<!-- * Docker - Can be used to run the application in a virtual container. If running via docker, the remaining prerequisites can be bypassed, and you can skip ahead to the steps labeled **docker** in [step 2](#2-start-application) -->
 
 * ffmpeg - Package used here to connect to remote RTSP streams
 ```
@@ -66,7 +67,6 @@ nvm install v8.9.0
 nvm use 8.9.0
 ```
 
-
 # Steps
 
 Follow these steps to setup and run this Code Pattern.
@@ -80,7 +80,7 @@ Follow these steps to setup and run this Code Pattern.
 ## 1. Clone repository
 
 ```
-git clone https://github.com/IBM/maximo-streaming-video-analysis -b timeline maximo-timeline
+git clone https://github.com/IBM/maximo-visual-timeseries
 ```
 
 <!-- Navigate to the project folder
@@ -115,7 +115,7 @@ Start backend
 PORT=3000 npm start
 ```
 
-<!-- 
+<!--
 **Docker**
 Start Backend
 ```
@@ -131,14 +131,14 @@ docker run -it -p 8080:8080 kkbankol/maximo-live /bin/bash -c "cd /maximo-stream
 ## 3. Configure web application
 Access the web application at [localhost:8080](localhost:8080).
 
-Click "Login" and provide the url, username, and password for the Maximo Visual Inspection instance. These credentials should have been provided in your welcome letter.
+Click "Login" and provide the url, and credentials for the Maximo Visual Inspection instance. If you're using Maximo Visual Inspection v8.0.0 and up, you'll need to provide your API key. Maximo Visual Inspection 1.3.0 and below requires a username and password. These credentials can be found in your welcome letter.
 
-<img src="https://i.imgur.com/L9QdZ5b.png" />
+<img src="https://i.imgur.com/JGITYcy.png" />
 
 Next, click "Configure Model" in the Menu. Select your custom model. Then, select objects or classes associated with that model that you'd like to observe in the dashboard.
 <!-- These selected categories can be grouped as either negative or positive. -->
 
-<img src="https://i.imgur.com/t5UUsna.png" />
+<img src="https://i.imgur.com/e4pvLPy.png" />
 
 After selecting the relevant model categories, we can then being streaming a video to the application for analysis. Currently, this app supports the following video sources. To stop a video from playing, click "Stop Stream".
 
@@ -157,11 +157,21 @@ Once the video begins playing, click the "Start Analysis of Feed" button to anal
 
 As results are received that match the model configuration, they will then be rendered in the line graph section on the right hand side like so.
 
-<img src="https://i.imgur.com/GQYaq06.png"/>
+<img src="https://i.imgur.com/go0FBIV.png"/>
 
-Hovering over one of the inference results will show a popup modal with detailed information for that particular inference
+Revisiting the aircraft use case, we can see the flow of events for the aircraft
 
-<img src="https://i.imgur.com/5zzxkA9.png"/>
+- Arrived at gate at 6:06PM
+- Jetbridge connected at 6:08PM
+- Beltloader activated at 6:08PM
+- Cargo Hold opened at 6:09PM
+
+Hovering over one of the inference results will show a popup modal with a screenshot of that particular inference
+
+<img src="https://i.imgur.com/2z9ABlS.png"/>
+
+Given this information, we see how airlines can use Maximo Visual Inspection to keep track of processes, and determine how quickly each step in the process may take. This can also of course be used for other industries, such as manufacturing, shipping, healthcare, and more.
+
 
 <!-- , such as the identified class/object, heatmap/bounding boxes, and confidence score.
 
