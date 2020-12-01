@@ -10,7 +10,7 @@
   <cv-header aria-label="Carbon header">
   <cv-header-menu-button aria-label="Header menu" aria-controls="side-nav" />
   <cv-header-name href="javascript:void(0)" prefix="IBM">
-    [Platform]
+    [Code Pattern]
   </cv-header-name>
   <!-- <cv-header-nav aria-label="Carbon nav">
       <cv-header-menu-item @click="showModal({'name': 'login-modal', 'title': 'Login'})">
